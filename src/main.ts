@@ -14,7 +14,11 @@ async function bootstrap() {
 
     // Configurar CORS
     app.enableCors({
-      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        process.env.FRONTEND_URL || 'http://localhost:3000'
+      ],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
@@ -38,7 +42,7 @@ async function bootstrap() {
     app.useGlobalFilters(new AllExceptionsFilter());
 
     // Configurar puerto
-    const port = configService.get('PORT', 3000);
+    const port = configService.get('PORT', 3001);
 
     await app.listen(port);
 
