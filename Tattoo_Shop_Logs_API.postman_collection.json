@@ -1,0 +1,554 @@
+{
+  "info": {
+    "name": "Tattoo Shop - Logs API",
+    "description": "Colección completa para validar el módulo de logs del backend de Tattoo Shop",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Access token is returned', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('access_token');",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.access_token);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@tattooshop.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. CRUD Logs",
+      "item": [
+        {
+          "name": "Crear Log",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has log ID', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData.id).to.be.a('string');",
+                  "    pm.collectionVariables.set('CREATED_LOG_ID', jsonData.id);",
+                  "});",
+                  "",
+                  "pm.test('Timestamp is created', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('timestamp');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"LOGIN\",\n  \"userId\": \"test_user_postman\",\n  \"entityType\": \"user\",\n  \"entityId\": \"test_user_postman\",\n  \"details\": {\n    \"userAgent\": \"Postman Test\",\n    \"ip\": \"192.168.1.999\",\n    \"loginMethod\": \"postman_test\",\n    \"description\": \"Login test desde Postman\"\n  },\n  \"ipAddress\": \"192.168.1.999\",\n  \"userAgent\": \"Postman Test Agent\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/logs",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Todos los Logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has data array', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Pagination info present', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('total');",
+                  "    pm.expect(jsonData).to.have.property('page');",
+                  "    pm.expect(jsonData).to.have.property('limit');",
+                  "    pm.expect(jsonData.total).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs?page=1&limit=10&sortBy=timestamp&sortOrder=desc",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "timestamp"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Log Específico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Log details are correct', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData).to.have.property('action');",
+                  "    pm.expect(jsonData).to.have.property('userId');",
+                  "    pm.expect(jsonData).to.have.property('entityType');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/{{CREATED_LOG_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "{{CREATED_LOG_ID}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Estadísticas",
+      "item": [
+        {
+          "name": "Estadísticas de Logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Stats structure is correct', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('general');",
+                  "    pm.expect(jsonData).to.have.property('byAction');",
+                  "    pm.expect(jsonData).to.have.property('byEntity');",
+                  "    pm.expect(jsonData.general).to.have.property('totalLogs');",
+                  "    pm.expect(jsonData.general.totalLogs).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('Actions array is populated', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.byAction).to.be.an('array');",
+                  "    pm.expect(jsonData.byAction.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('Entities array is populated', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.byEntity).to.be.an('array');",
+                  "    pm.expect(jsonData.byEntity.length).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/stats",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Filtros",
+      "item": [
+        {
+          "name": "Logs por Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('All logs belong to specified user', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data.length > 0) {",
+                  "        jsonData.data.forEach(log => {",
+                  "            pm.expect(log.userId).to.eql('admin_001');",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/user/admin_001?page=1&limit=5",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "user", "admin_001"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logs por Entidad",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('All logs belong to specified entity', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data.length > 0) {",
+                  "        jsonData.data.forEach(log => {",
+                  "            pm.expect(log.entityType).to.eql('order');",
+                  "            pm.expect(log.entityId).to.eql('order_001');",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/entity/order/order_001",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "entity", "order", "order_001"]
+            }
+          }
+        },
+        {
+          "name": "Filtrar por Acción",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('All logs have LOGIN action', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data.length > 0) {",
+                  "        jsonData.data.forEach(log => {",
+                  "            pm.expect(log.action).to.eql('LOGIN');",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs?action=LOGIN&limit=5",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "LOGIN"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar por Tipo de Entidad",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('All logs are for orders', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data.length > 0) {",
+                  "        jsonData.data.forEach(log => {",
+                  "            pm.expect(log.entityType).to.eql('order');",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs?entityType=order&sortBy=timestamp&sortOrder=asc",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"],
+              "query": [
+                {
+                  "key": "entityType",
+                  "value": "order"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "timestamp"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Limpieza",
+      "item": [
+        {
+          "name": "Limpiar Logs Antiguos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains deletion count', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('deleted');",
+                  "    pm.expect(jsonData.deleted).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/cleanup/365",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "cleanup", "365"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Casos de Error",
+      "item": [
+        {
+          "name": "Sin Autenticación",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"]
+            }
+          }
+        },
+        {
+          "name": "Log No Encontrado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/logs/00000000-0000-0000-0000-000000000000",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs", "00000000-0000-0000-0000-000000000000"]
+            }
+          }
+        },
+        {
+          "name": "Datos Inválidos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Validation errors are returned', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"INVALID_ACTION\",\n  \"userId\": \"\",\n  \"entityType\": \"invalid_type\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/logs",
+              "host": ["{{BASE_URL}}"],
+              "path": ["logs"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
