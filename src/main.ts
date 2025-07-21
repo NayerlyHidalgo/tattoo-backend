@@ -13,14 +13,21 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
 
     // Configurar CORS para Render
+    const allowedOrigins: (string | RegExp)[] = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://nestjs-tatoo-backend.desarrollo-software.xyz',
+      process.env.FRONTEND_URL || 'http://localhost:3000',
+    ];
+
+    // En producción, agregar dominios de Render
+    if (process.env.NODE_ENV === 'production') {
+      allowedOrigins.push('https://tattoo-frontend.onrender.com');
+      allowedOrigins.push(/\.onrender\.com$/);
+    }
+
     app.enableCors({
-      origin: [
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'https://nestjs-tatoo-backend.desarrollo-software.xyz',
-        process.env.FRONTEND_URL,
-        /\.onrender\.com$/
-      ],
+      origin: allowedOrigins.filter(Boolean),
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
@@ -44,7 +51,7 @@ async function bootstrap() {
     app.useGlobalFilters(new AllExceptionsFilter());
 
     // Configurar puerto para Render (usa PORT del environment o 3001 por defecto)
-    const port = process.env.PORT || configService.get('PORT', 3001);
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : configService.get<number>('PORT') || 3001;
 
     // Bind a 0.0.0.0 para Render
     await app.listen(port, '0.0.0.0');
