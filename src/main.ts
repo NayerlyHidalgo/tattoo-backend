@@ -12,12 +12,14 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
 
-    // Configurar CORS
+    // Configurar CORS para Render
     app.enableCors({
       origin: [
         'http://localhost:3000',
         'http://localhost:3001',
-        process.env.FRONTEND_URL || 'http://localhost:3000'
+        'https://nestjs-tatoo-backend.desarrollo-software.xyz',
+        process.env.FRONTEND_URL,
+        /\.onrender\.com$/
       ],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
@@ -41,12 +43,13 @@ async function bootstrap() {
     // Filtros globales
     app.useGlobalFilters(new AllExceptionsFilter());
 
-    // Configurar puerto
-    const port = configService.get('PORT', 3001);
+    // Configurar puerto para Render (usa PORT del environment o 3001 por defecto)
+    const port = process.env.PORT || configService.get('PORT', 3001);
 
-    await app.listen(port);
+    // Bind a 0.0.0.0 para Render
+    await app.listen(port, '0.0.0.0');
 
-    logger.log(`🚀 Application is running on: http://localhost:${port}`);
+    logger.log(`🚀 Application is running on: http://0.0.0.0:${port}`);
     logger.log(`📊 Environment: ${configService.get('NODE_ENV', 'development')}`);
     logger.log(`🗄️  PostgreSQL Host: ${configService.get('DB_HOST')}`);
     logger.log(`🍃 MongoDB URI: ${configService.get('MONGODB_URI') ? 'Connected' : 'Not configured'}`);

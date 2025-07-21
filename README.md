@@ -1,98 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🎨 Tattoo Shop Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gestión de tienda de tatuajes construida con NestJS, TypeScript, PostgreSQL y MongoDB.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Deployment
 
-## Description
+### Render (Actual)
+- **Backend API**: `https://your-backend-name.onrender.com`
+- **Documentación**: `https://your-backend-name.onrender.com/api/docs`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### VPS (Deprecado)
+- ~~Backend: https://nestjs-tatoo-backend.desarrollo-software.xyz/~~
 
-## Project setup
+## 📋 Configuración para Render
 
-```bash
-$ npm install
+### 1. Crear servicio web en Render
+```
+Build Command: npm ci && npm run build
+Start Command: npm run start:prod
+Environment: Node
+Auto Deploy: Yes
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+### 2. Variables de entorno requeridas
+```
+NODE_ENV=production
+PORT=10000
+FRONTEND_URL=https://your-frontend-name.onrender.com
+DB_HOST=your-postgres-host
+DB_PORT=5432
+DB_USERNAME=your-username
+DB_PASSWORD=your-password
+DB_NAME=tattoo_shop
+MONGODB_URI=your-mongodb-uri
+JWT_SECRET=your-jwt-secret
+JWT_EXPIRES_IN=7d
+GMAIL_USER=your-email@gmail.com
+GMAIL_PASS=your-app-password
 ```
 
-## Run tests
+### 3. Base de datos
+- **PostgreSQL**: Crear PostgreSQL service en Render
+- **MongoDB**: Usar MongoDB Atlas (recomendado)
+
+## 🛠️ Desarrollo Local
 
 ```bash
-# unit tests
-$ npm run test
+# Instalar dependencias
+npm install
 
-# e2e tests
-$ npm run test:e2e
+# Ejecutar en modo desarrollo
+npm run start:dev
 
-# test coverage
-$ npm run test:cov
+# Compilar para producción
+npm run build
+
+# Ejecutar en producción
+npm run start:prod
 ```
 
-## Deployment
+## 📁 Estructura del Proyecto
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```
+src/
+├── auth/           # Autenticación y autorización
+├── users/          # Gestión de usuarios
+├── products/       # Catálogo de productos
+├── cart/           # Carrito de compras
+├── orders/         # Gestión de pedidos
+├── invoices/       # Facturación
+├── notifications/  # Sistema de notificaciones
+├── mail/           # Servicio de email
+├── logs/           # Sistema de logs
+└── common/         # Utilidades compartidas
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 🔧 Características
+
+- ✅ Autenticación JWT
+- ✅ Roles y permisos
+- ✅ CRUD completo para productos
+- ✅ Carrito de compras
+- ✅ Sistema de pedidos
+- ✅ Notificaciones por email
+- ✅ Logs de auditoría
+- ✅ Documentación Swagger
+- ✅ Validación de datos
+- ✅ Manejo de errores
+- ✅ CORS configurado
+
+## 📝 API Endpoints
+
+### Autenticación
+- `POST /auth/login` - Login de usuario
+- `POST /auth/register` - Registro de usuario
+- `POST /auth/logout` - Logout de usuario
+
+### Productos
+- `GET /products` - Listar productos
+- `GET /products/:id` - Obtener producto
+- `POST /products` - Crear producto (Admin)
+- `PUT /products/:id` - Actualizar producto (Admin)
+- `DELETE /products/:id` - Eliminar producto (Admin)
+
+### Carrito
+- `GET /cart` - Obtener carrito
+- `POST /cart/items` - Agregar item al carrito
+- `PUT /cart/items/:id` - Actualizar item del carrito
+- `DELETE /cart/items/:id` - Eliminar item del carrito
+
+### Pedidos
+- `GET /orders` - Listar pedidos
+- `POST /orders` - Crear pedido
+- `GET /orders/:id` - Obtener pedido
+- `PUT /orders/:id/status` - Actualizar estado
+
+## 🧪 Testing
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Tests unitarios
+npm run test
+
+# Tests e2e
+npm run test:e2e
+
+# Coverage
+npm run test:cov
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📊 Monitoring
 
-## Resources
+- Logs almacenados en PostgreSQL
+- Interceptor de logging para todas las requests
+- Filtro global de excepciones
+- Health check endpoint: `/health`
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🔒 Seguridad
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Validación de entrada con class-validator
+- Sanitización de datos
+- Rate limiting (configurar en Render)
+- CORS configurado
+- JWT con expiración
 
-## Support
+## 📧 Contacto
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Para consultas técnicas o colaboraciones, contactar al equipo de desarrollo.
