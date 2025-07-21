@@ -51,7 +51,7 @@ async function bootstrap() {
     app.useGlobalFilters(new AllExceptionsFilter());
 
     // Configurar puerto para Render (usa PORT del environment o 3001 por defecto)
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : configService.get<number>('PORT') || 3001;
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
     // Bind a 0.0.0.0 para Render
     await app.listen(port, '0.0.0.0');
