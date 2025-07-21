@@ -4,6 +4,17 @@ services:
     env: node
     region: oregon
     plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true type: web
+    name: tattoo-backend-api
+    env: node
+    region: oregon
+    plan: free
     rootDir: mi-backend
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
