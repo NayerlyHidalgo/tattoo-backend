@@ -6,7 +6,7 @@ services:
     plan: free
 
     rootDir: .
-    buildCommand: npm ci && npm run build
+    buildCommand: NODE_ENV=development npm ci && npm run build
     startCommand: npm run start:prod
     healthCheckPath: /health
     envVars:
