@@ -44,9 +44,26 @@ export class AuthService {
     try {
       const user = await this.usersService.create(registerDto);
       
-      // Retornar sin el password
-      const { password, ...result } = user;
-      return result;
+      // Generar token como en login
+      const payload = { 
+        sub: user.id, 
+        email: user.email, 
+        role: user.role,
+        username: user.username 
+      };
+
+      // Retornar con token como en login
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        }
+      };
     } catch (error) {
       if (error.code === '23505') { // PostgreSQL unique violation
         throw new ConflictException('El email ya está registrado');

@@ -1,0 +1,19 @@
+# Este archivo es solo informativo
+# Render hace auto-deploy desde el repositorio sin necesidad de GitHub Actions
+
+name: 📝 Render Auto Deploy Info
+
+on:
+  push:
+    branches: [ main, feature/migrate-to-render ]
+
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📋 Info
+        run: |
+          echo "🚀 Auto-deployment configurado en Render"
+          echo "📍 Backend: https://tattoo-backend-api.onrender.com"
+          echo "📍 Frontend: https://tattoo-frontend.onrender.com"
+          echo "ℹ️  Render detecta cambios automáticamente y redeploya"

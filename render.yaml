@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: tattoo-backend-api
+    env: node
+    region: oregon
+    plan: free
+
+    rootDir: .
+    buildCommand: npm ci && npm install -g typescript && npx tsc --skipLibCheck
+    startCommand: node dist/main.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # PostgreSQL connection
+      - key: DB_HOST
+        fromDatabase:
+          name: tattoo-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: tattoo-db
+          property: port
+      - key: DB_USERNAME
+        fromDatabase:
+          name: tattoo-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: tattoo-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: tattoo-db
+          property: database
+      - key: DB_SSL
+        value: "true"
+      - key: DB_SYNCHRONIZE
+        value: "true"
+      # MongoDB connection
+      - key: MONGODB_URI
+        sync: false # Define esto manualmente en el dashboard de Render
+    autoDeploy: true
+
+  - type: postgres
+    name: tattoo-db
+    plan: free
+    region: oregon
+    ipAllowList: [] # Permitir todas las conexiones
