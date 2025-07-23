@@ -6,7 +6,7 @@ services:
     plan: free
 
     rootDir: .
-    buildCommand: node build-script.js
+    buildCommand: bash ./build-render.sh
     startCommand: cd dist && node main
     healthCheckPath: /health
     envVars:
