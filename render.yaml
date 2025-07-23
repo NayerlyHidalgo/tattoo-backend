@@ -6,7 +6,7 @@ services:
     plan: free
 
     rootDir: mi-backend
-    buildCommand: npm install --include=dev && npx nest build
+    buildCommand: npm ci && npm run build
     startCommand: npm run start:prod
     healthCheckPath: /health
     envVars:
