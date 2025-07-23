@@ -19,5 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "forceConsistentCasingInFileNames": false,
     "noEmitOnError": false
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "test", "**/*spec.ts", "**/seed*.ts", "src/logs/**/*"]
 }
