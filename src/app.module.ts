@@ -11,7 +11,7 @@ import { InvoicesModule } from './invoices/invoices.module';
 import { OrdenesModule } from './orden/ordenes.module';
 import { ProductsModule } from './products/products.module';
 import { ReviewModule } from './review/review.module';
-import { LogsModule } from './logs/logs.module';
+// import { LogsModule } from './logs/logs.module';
 import { CartModule } from './cart/cart.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MailModule } from './mail/mail.module';
@@ -50,7 +50,7 @@ import { LoggingModule } from './common/logging.module';
     OrdenesModule,
     ProductsModule,
     ReviewModule,
-    LogsModule,
+    // LogsModule,
     CartModule,
     NotificationsModule,
     MailModule

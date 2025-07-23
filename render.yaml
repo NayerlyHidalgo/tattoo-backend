@@ -6,7 +6,7 @@ services:
     plan: free
 
     rootDir: .
-    buildCommand: NODE_ENV=development npm ci --force && npx tsc --skipLibCheck || true && node fix-modules.js
+    buildCommand: npm ci && npx @nestjs/cli build
     startCommand: npm run start:prod
     healthCheckPath: /health
     envVars:
