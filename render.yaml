@@ -4,17 +4,6 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm run start:prod
-    healthCheckPath: /health
-    envVars:
-      - key: NODE_ENV
-        value: production
-    autoDeploy: true type: web
-    name: tattoo-backend-api
-    env: node
-    region: oregon
-    plan: free
     rootDir: mi-backend
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
@@ -22,9 +11,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        fromService:
-          type: web
-          name: tattoo-backend-api
-          property: port
+      # Puedes agregar aquí tus variables de entorno personalizadas
     autoDeploy: true
