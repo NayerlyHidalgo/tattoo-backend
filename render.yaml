@@ -6,8 +6,8 @@ services:
     plan: free
 
     rootDir: .
-    buildCommand: npm ci && npx @nestjs/cli build
-    startCommand: npm run start:prod
+    buildCommand: node build-script.js
+    startCommand: cd dist && node main
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
