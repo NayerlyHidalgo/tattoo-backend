@@ -5,11 +5,10 @@ services:
     region: oregon
     plan: free
     rootDir: mi-backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npx nest build
     startCommand: npm run start:prod
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      # Puedes agregar aquí tus variables de entorno personalizadas
     autoDeploy: true
