@@ -4,8 +4,9 @@ services:
     env: node
     region: oregon
     plan: free
+
     rootDir: mi-backend
-    buildCommand: npm install && npx nest build
+    buildCommand: npm install --include=dev && npx nest build
     startCommand: npm run start:prod
     healthCheckPath: /health
     envVars:
